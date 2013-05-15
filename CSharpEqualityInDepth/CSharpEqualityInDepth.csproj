@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PartThreeIEquatableTests.cs" />
     <Compile Include="PartOneBasicDoubleEqualsTests.cs" />
     <Compile Include="PartTwoEqualsAndDoubelEqualsAreNotEqualTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

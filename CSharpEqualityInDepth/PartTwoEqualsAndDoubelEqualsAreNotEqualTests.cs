@@ -59,8 +59,19 @@ namespace CSharpEqualityInDepth
       Assert.IsFalse(x == null);
     }
 
+    // To demonstrate "==" overloading, we'll need some new classes. Again we start by defining a simple
+    // base class.
     private class BaseClass {}
 
+    // Next is the definition of the class that will be tested. There are a few things to note here. 1. The
+    // code itself is smellier than an overripe Vieux Boulogne cheese as both == and != will always be true.
+    // However it suits our purposes in these tests to do this, so hopefully you'll forgive this coding crime.
+    // 2. The way operators are operloaded in C# is messy. They must be defined as static methods in the class
+    // they affect. I do not know the exact details, but I assume the are some sort of syntactic sugar used
+    // by the compiler to affect which method is used to perform the comparison. 3. Certain operators come as
+    // a pair and if you overload one, you must overload the other too. "==" and "!=" are one such pair. Why
+    // "!=" isn't inferred from "==" is a mystery to me. Microsoft could at least allowed it to default to 
+    // inferred, even if there are edge cases that require it to be explicitly defined.
     private class EqualToAndNotEqualToEverythingClass : BaseClass
     {
       public static bool operator ==(EqualToAndNotEqualToEverythingClass lhs, object rhs)
@@ -74,6 +85,9 @@ namespace CSharpEqualityInDepth
       }
     }
 
+    // The first test compares a value to null, using the above class. By making it return true always,
+    // the test can compare against null (which hopefully doesn't have its own implementation of ==), thus
+    // guaranteeing we are testing our overload.
     [Test]
     public void OverloadOfDoubleEqualsUsed_WhenLhsIsCorrectType()
     {
@@ -81,6 +95,9 @@ namespace CSharpEqualityInDepth
       Assert.IsTrue(x == null);
     }
 
+    // The next test confirms that, since we had to define "!=", at least it's being used. Incidently, the
+    // compiler issues a warning here, as it suggests that x != x is a pointless comparison, for of course
+    // it will be false. It fails to take in to account just how bad some folk's code can be! :)
     [Test]
     public void OverloadOfNotEqualsUsed_WhenLhsIsCorrectType()
     {
@@ -88,6 +105,10 @@ namespace CSharpEqualityInDepth
       Assert.IsTrue(x != x);
     }
 
+    // Because "==" is a static overload, rather than an override, it isn't polymorphic. In other words,
+    // if x is defined as BaseClass, then the compiler will choose the version of "==" appropriate to that
+    // at compile time. The fact that x is an instance of EqualToAndNotEqualToEverythingClass at runtime
+    // doesn't effect it.
     [Test]
     public void OverloadOfDoubleEqualsNotUsed_WhenLhsIsBaseType()
     {
@@ -95,8 +116,10 @@ namespace CSharpEqualityInDepth
       Assert.IsFalse(x == null);
     }
 
+    // The same applies to "!=". The version to use is chosen at compile-time and sanity returns to the !=
+    // comparison.
     [Test]
-    public void OverloadOfNotEqualsNotUsed_WhenLhsIsCorrectType()
+    public void OverloadOfNotEqualsNotUsed_WhenLhsIsBaseType()
     {
       BaseClass x = new EqualToAndNotEqualToEverythingClass();
       Assert.IsFalse(x != x);
