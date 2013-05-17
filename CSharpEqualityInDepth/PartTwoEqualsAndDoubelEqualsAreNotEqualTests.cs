@@ -2,10 +2,10 @@
 
 namespace CSharpEqualityInDepth
 {
-  // The two ways of checking for equality in C# - using == and .Equals() can be "overridden". It is important
-  // to remember though that override and overload are two very different things in C#: .Equals() can be both
-  // overriden and overloaded, whereas == can only be overloaded. This set of tests demonstrate the significant
-  // effects this subtle difference can have on equality comparisons.
+  // The two ways of checking for equality in C# - using == and .Equals() - can be modified for individual types. 
+  // It is important to remember though that override and overload are two very different things in C#: .Equals() 
+  // can be both overridden and overloaded, whereas == can only be overloaded. This set of tests demonstrate the 
+  // significant effects this subtle difference can have on equality comparisons.
   [TestFixture]
   public class PartTwoEqualsAndDoubelEqualsAreNotEqualTests
   {
@@ -40,7 +40,7 @@ namespace CSharpEqualityInDepth
       Assert.IsTrue(x.Equals(null));
     }
 
-    // As Equals() is overriden, rather than overloaded, polymorphism should come in to play when determining
+    // As Equals() is overridden, rather than overloaded, polymorphism should come in to play when determining
     // which version of Equals() to use. In other words, in the following test, x is declared as being of
     // type EqualsBaseClass at compile-time, but at run-time, it is assigned an instance of 
     // EqualToEverythingClass. Therefore, the latter's version is invoked by the Assert.
@@ -66,8 +66,8 @@ namespace CSharpEqualityInDepth
     // Next is the definition of the class that will be tested. There are a few things to note here. 1. The
     // code itself is smellier than an overripe Vieux Boulogne cheese as both == and != will always be true.
     // However it suits our purposes in these tests to do this, so hopefully you'll forgive this coding crime.
-    // 2. The way operators are operloaded in C# is messy. They must be defined as static methods in the class
-    // they affect. I do not know the exact details, but I assume the are some sort of syntactic sugar used
+    // 2. The way operators are overloaded in C# is messy. They must be defined as static methods in the class
+    // they affect. I do not know the exact details, but I assume that some sort of syntactic sugar is used
     // by the compiler to affect which method is used to perform the comparison. 3. Certain operators come as
     // a pair and if you overload one, you must overload the other too. "==" and "!=" are one such pair. Why
     // "!=" isn't inferred from "==" is a mystery to me. Microsoft could at least allowed it to default to 
@@ -95,7 +95,7 @@ namespace CSharpEqualityInDepth
       Assert.IsTrue(x == null);
     }
 
-    // The next test confirms that, since we had to define "!=", at least it's being used. Incidently, the
+    // The next test confirms that, since we had to define "!=", at least it's being used. Incidentally, the
     // compiler issues a warning here, as it suggests that x != x is a pointless comparison, for of course
     // it will be false. It fails to take in to account just how bad some folk's code can be! :)
     [Test]

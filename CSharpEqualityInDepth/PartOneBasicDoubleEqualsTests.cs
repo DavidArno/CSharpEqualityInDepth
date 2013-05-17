@@ -1,4 +1,7 @@
-﻿using NUnit.Framework;
+﻿using System.Drawing;
+
+using NUnit.Framework;
+using NUnit.Framework.Constraints;
 
 namespace CSharpEqualityInDepth
 {
@@ -13,8 +16,37 @@ namespace CSharpEqualityInDepth
   [TestFixture]
   public class PartOneBasicDoubleEqualsTests
   {
-    // Two strings are equal if they contain the same content, as shown by this first test. The two
-    // variables, x and y, have different references, yet they are equal.
+    // In C#, there are two types of equality: equal values and equal references. By default, objects
+    // are compared by reference. Two variables pointing to the same object reference are equal.
+    [Test]
+    public void TwoReferencesToSameObject_AreEqual()
+    {
+      var x = new PartOneBasicDoubleEqualsTests();
+      var y = x;
+      Assert.IsTrue(x == y);
+    }
+
+    // Two instances of the same object will not be equal as they refer to two different references.
+    [Test]
+    public void TwoReferencesToSameType_AreNotEqual()
+    {
+      var x = new PartOneBasicDoubleEqualsTests();
+      var y = new PartOneBasicDoubleEqualsTests();
+      Assert.IsFalse(x == y);
+    }
+
+    // Two instances of the same value type will be equal. Structs are value types, so two instances
+    // of a struct will be equal if their values are equal.
+    [Test]
+    public void TwoReferencesToSameVlaue_AreEqual()
+    {
+      Color x = Color.FromArgb(0x78FF0000);
+      Color y = Color.FromArgb(0x78FF0000);
+      Assert.IsTrue(x == y);
+    }
+
+    // Even though they are objects, two strings are equal if they contain the same content, as shown by 
+    // the next test. The two variables, x and y, have different references, yet they are equal.
     [Test]
     public void TwoStringsWithTheSameContent_AreEqual()
     {
@@ -24,7 +56,7 @@ namespace CSharpEqualityInDepth
     }
 
     // The following test proves that x and y have different references. The values may be the same,
-    // but a reference comparison failes.
+    // but a reference comparison fails.
     [Test]
     public void TwoStringsWithTheSameContent_MayHaveDifferentReferences()
     {
